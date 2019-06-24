@@ -3,6 +3,7 @@
 
 export class MazeGen{
     
+    /*
     Algo;
     x;
     y;
@@ -74,5 +75,5 @@ export class MazeGen{
 
     }
 
-
+*/
 }

@@ -1,5 +1,5 @@
-import { MazeGen } from './MazeGen';
-
+import { MazeGen } from "./MazeGen";
+alert('LOL');
 var canvas = document.querySelector('canvas');
 var context = canvas.getContext("2d");
 
@@ -12,7 +12,7 @@ var bh = 600;
 
 //MAIN
 
-let maze = new MazeGen(canvas, context, bw, bh);
+//let maze = new MazeGen(canvas, context, bw, bh);
 
 for (var x = 0; x <= bw; x += 40) {
     context.moveTo(0.5 + x, 0);
