@@ -7,14 +7,16 @@ var bw = 600;
 // Box height
 var bh = 600;
 //position in pixels
+var xPix = 0;
+var yPix = 0;
+//position
 var xPos = 0;
 var yPos = 0;
-var Node = { x: null, y: null}
 //all nodes
 var Nodes = Array.from(Array(15),() => new Array(15));
 for(let i = 0; i < Nodes.length; i++){
     for(let j = 0; j < Nodes[i].length; j++)
-        Nodes[i][j] = {x: i, y: j};
+        Nodes[i][j] = {x: i, y: j, visited: 0};
 }
 
 //FUNCTIONS
@@ -42,53 +44,147 @@ function drawGrid(){
 function breakWall(wall){
     switch(wall){
         case 'N':
-            context.clearRect(xPos-19,yPos-21,39,2);
-        break;
+            context.clearRect(xPix-19,yPix-21,39,2);
+            return 'N';
         case 'S':
-            context.clearRect(xPos-19,yPos+19,39,2);
-        break;
+            context.clearRect(xPix-19,yPix+19,39,2);
+            return 'S';
         case 'E':
-            context.clearRect(xPos+19,yPos-19,2,39);
-        break;
+            context.clearRect(xPix+19,yPix-19,2,39);
+            return 'E';
         case 'W':
-            context.clearRect(xPos-21,yPos-19,2,39);
-        break;
+            context.clearRect(xPix-21,yPix-19,2,39);
+            return 'W';
     }
     
 }
 
 function getWall(){
-    let wall = getRandomInt(4);
-    switch(wall){
-        case 0:
-            return 'N';
+    if(xPos == 0 && yPos == 0){
+        let wall = getRandomInt(2);
+        switch(wall){
+            case 0:
+                return 'E';
+            case 1:
+                return 'S';
+        }
+    } else if(xPos == 0 && yPos == 14){
+        let wall = getRandomInt(2);
+        switch(wall){
+            case 0:
+                return 'N';
+            case 1:
+                return 'E';
+        }
+    } else if(xPos == 14 && yPos == 0){
+        let wall = getRandomInt(2);
+        switch(wall){
+            case 0:
+                return 'W';
+            case 1:
+                return 'S';
+        }
+    } else if(xPos == 14 && yPos == 14){
+        let wall = getRandomInt(2);
+        switch(wall){
+            case 0:
+                return 'N';
+            case 1:
+                return 'W';
+        }
+    } else if(xPos == 0){
+        let wall = getRandomInt(3);
+        switch(wall){
+            case 0:
+                return 'N';
+            case 1:
+                return 'S';
+            case 2:
+                return 'E';
+        }
+
+    } else if(xPos == 14){
+        let wall = getRandomInt(3);
+        switch(wall){
+            case 0:
+                return 'N';
+            case 1:
+                return 'S';
+            case 2:
+                return 'W';
+        }
+    } else if(yPos == 0) {
+        let wall = getRandomInt(3);
+        switch(wall){
+            case 0:
+                return 'S';
+            case 1:
+                return 'W';
+            case 2:
+                return 'E';
+        }
+    } else if(yPos == 14){
+        let wall = getRandomInt(3);
+        switch(wall){
+            case 0:
+                return 'N';
+            case 1:
+                return 'W';
+            case 2:
+                return 'E';
+        }
+    } else {
+        let wall = getRandomInt(4);
+        switch(wall){
+            case 0:
+                return 'N';
+            case 1:
+                return 'S';
+            case 2:
+                return 'W';
+            case 3:
+                return 'E';
+        }
+    }
+}
+
+function moveTo(direction){
+    switch(direction){
+        case 'N':
+            updateCurrLoc(xPos,yPos-1);
+            displayLocation();
         break;
-        case 1:
-            return 'S';
+        case 'S':
+            updateCurrLoc(xPos, yPos+1);
+            displayLocation();
         break;
         case 2:
-            return 'W';
+            updateCurrLoc(xPos-1,yPos);
+            displayLocation();
         break;
         case 3:
-            return 'E';
+            updateCurrLoc(xPos+1, yPos);
+            displayLocation();
         break;
     }
 }
 
 function updateCurrLoc(x, y){
-    xPos = x*40+20;
-    yPos = y*40+20;
+    xPos = x;
+    yPos = y
+    xPix = x*40+20;
+    yPix = y*40+20;
 }
 
 
 
 function displayLocation(){
     context.fillStyle = "black";
-    context.fillRect(xPos-10,yPos-10,20,20);
+    context.fillRect(xPix-10,yPix-10,20,20);
 }
 
 function clearLocation(){
-    context.clearRect(xPos-10,yPos-10,20,20);
+    context.clearRect(xPix-10,yPix-10,20,20);
 }
 
 
@@ -105,23 +201,8 @@ function sleep(ms){
 drawGrid();
 updateCurrLoc(0, 14);
 displayLocation();
-loop();
-async function loop(){
-    
-    
-    await sleep(500);
-    updateCurrLoc(1,14);
-    displayLocation();
+loopMain();
 
-    await sleep(500);
-    clearLocation();
-    updateCurrLoc(1,14);
-    displayLocation();
-    breakWall(getWall());
+async function loopMain(){
     
-    await sleep(500);
-    clearLocation();
-    updateCurrLoc(2,14);
-    displayLocation();
-
 }
