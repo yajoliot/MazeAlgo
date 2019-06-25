@@ -158,11 +158,11 @@ function moveTo(direction){
             updateCurrLoc(xPos, yPos+1);
             displayLocation();
         break;
-        case 2:
+        case 'W':
             updateCurrLoc(xPos-1,yPos);
             displayLocation();
         break;
-        case 3:
+        case 'E':
             updateCurrLoc(xPos+1, yPos);
             displayLocation();
         break;
@@ -204,5 +204,9 @@ displayLocation();
 loopMain();
 
 async function loopMain(){
-    
+    while(true){
+        
+        await sleep(500);
+        moveTo(breakWall(getWall()));
+    }
 }
