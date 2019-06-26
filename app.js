@@ -13,14 +13,12 @@ var yPix = 0;
 var xPos = 0;
 var yPos = 0;
 //all nodes
-var Nodes = Array.from(Array(15),() => new Array(15));
-for(let i = 0; i < Nodes.length; i++){
-    for(let j = 0; j < Nodes[i].length; j++)
-        Nodes[i][j] = {x: i, y: j, visited: 0};
-}
+var nodes = null;
+var stack = null;
 
 //FUNCTIONS
 
+//  MAZE HTMLDRAWING AND LOCATION FUNCTIONS
 function drawGrid(){
     for (let i = 0; i <= this.bw; i += 40) {
         this.context.moveTo(0.5 + i, 0);
@@ -59,111 +57,26 @@ function breakWall(wall){
     
 }
 
-function getWall(){
-    if(xPos == 0 && yPos == 0){
-        let wall = getRandomInt(2);
-        switch(wall){
-            case 0:
-                return 'E';
-            case 1:
-                return 'S';
-        }
-    } else if(xPos == 0 && yPos == 14){
-        let wall = getRandomInt(2);
-        switch(wall){
-            case 0:
-                return 'N';
-            case 1:
-                return 'E';
-        }
-    } else if(xPos == 14 && yPos == 0){
-        let wall = getRandomInt(2);
-        switch(wall){
-            case 0:
-                return 'W';
-            case 1:
-                return 'S';
-        }
-    } else if(xPos == 14 && yPos == 14){
-        let wall = getRandomInt(2);
-        switch(wall){
-            case 0:
-                return 'N';
-            case 1:
-                return 'W';
-        }
-    } else if(xPos == 0){
-        let wall = getRandomInt(3);
-        switch(wall){
-            case 0:
-                return 'N';
-            case 1:
-                return 'S';
-            case 2:
-                return 'E';
-        }
-
-    } else if(xPos == 14){
-        let wall = getRandomInt(3);
-        switch(wall){
-            case 0:
-                return 'N';
-            case 1:
-                return 'S';
-            case 2:
-                return 'W';
-        }
-    } else if(yPos == 0) {
-        let wall = getRandomInt(3);
-        switch(wall){
-            case 0:
-                return 'S';
-            case 1:
-                return 'W';
-            case 2:
-                return 'E';
-        }
-    } else if(yPos == 14){
-        let wall = getRandomInt(3);
-        switch(wall){
-            case 0:
-                return 'N';
-            case 1:
-                return 'W';
-            case 2:
-                return 'E';
-        }
-    } else {
-        let wall = getRandomInt(4);
-        switch(wall){
-            case 0:
-                return 'N';
-            case 1:
-                return 'S';
-            case 2:
-                return 'W';
-            case 3:
-                return 'E';
-        }
-    }
-}
-
 function moveTo(direction){
     switch(direction){
         case 'N':
             updateCurrLoc(xPos,yPos-1);
+            Nodes[xPos,yPos] = 1;
             displayLocation();
         break;
         case 'S':
             updateCurrLoc(xPos, yPos+1);
+            Nodes[xPos,yPos] = 1;
             displayLocation();
         break;
         case 'W':
             updateCurrLoc(xPos-1,yPos);
+            Nodes[xPos,yPos] = 1;
             displayLocation();
         break;
         case 'E':
             updateCurrLoc(xPos+1, yPos);
+            Nodes[xPos,yPos] = 1;
             displayLocation();
         break;
     }
@@ -187,7 +100,61 @@ function clearLocation(){
     context.clearRect(xPix-10,yPix-10,20,20);
 }
 
+//  NODE DFS ALGORITHM FUNCTIONS
 
+function initNodes(){
+    var nodes = Array.from(Array(15),() => new Array(15));
+    for(let i = 0; i < nodes.length; i++){
+        for(let j = 0; j < nodes[i].length; j++)
+            nodes[i][j] = 0;
+    }
+    return nodes;
+}
+
+function isVisitedTwice(nodes){
+    for(let i = 0; i < nodes.length; i++){
+        for(let j = 0; j < nodes[i].length; j++)
+            if(nodes[i,j] != 2) return false;
+    }
+    return true;
+}
+
+function findNextNode(){
+    var avail = scanAdjacentNodes();
+    var count = 0;
+    var possible = [];
+    avail.forEach((x,i) =>{
+        if(x){
+            count++;
+            if(i == 0) possible.push('N');
+            if(i == 1) possible.push('S');
+            if(i == 2) possible.push('W');
+            if(i == 3) possible.push('E');
+        }
+    });
+    if(possible.length != 0) return possible[getRandomInt(count)];
+    popNode();
+}
+
+function popNode(){
+
+}
+
+function scanAdjacentNodes(){
+    var avail = [true, true, true, true];  //[NORTH, SOUTH, WEST, EAST]
+    if(yPos-1 < 0 ) avail[0] = false;
+    if(yPos+1 > 14 ) avail[1] = false;
+    if(xPos-1 < 0 ) avail[2] = false;
+    if(xPos+1 > 14 ) avail[3] = false;
+    if(Nodes[xPos][yPos-1] != 0) avail[0] = false;
+    if(Nodes[xPos][yPos+1] != 0) avail[1] = false;
+    if(Nodes[xPos-1][yPos] != 0) avail[2] = false;
+    if(Nodes[xPos+1][yPos] != 0) avail[3] = false;
+    return avail;
+}
+
+
+//UTILITY FUNCTIONS
 function getRandomInt(max){
     return Math.floor(Math.random() * Math.floor(max));
 }
@@ -195,6 +162,10 @@ function getRandomInt(max){
 function sleep(ms){
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+
+
+
 
 //MAIN
     //init
@@ -205,8 +176,8 @@ loopMain();
 
 async function loopMain(){
     while(true){
-        
-        await sleep(500);
+        clearLocation();
         moveTo(breakWall(getWall()));
+        await sleep(500);
     }
 }
