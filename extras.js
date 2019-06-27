@@ -86,3 +86,31 @@ function getWall(){
         }
     }
 }
+function moveTo(direction){
+    switch(direction){
+        case 'N':
+            updateCurrLoc(xPos,yPos-1);
+            stack.push({x: xPos, y: yPos});
+            Nodes[xPos,yPos] = 1;
+            displayLocation();
+        break;
+        case 'S':
+            updateCurrLoc(xPos, yPos+1);
+            stack.push({x: xPos, y: yPos});
+            Nodes[xPos,yPos] = 1;
+            displayLocation();
+        break;
+        case 'W':
+            updateCurrLoc(xPos-1,yPos);
+            stack.push({x: xPos, y: yPos});
+            Nodes[xPos,yPos] = 1;
+            displayLocation();
+        break;
+        case 'E':
+            updateCurrLoc(xPos+1, yPos);
+            stack.push({x: xPos, y: yPos});
+            Nodes[xPos,yPos] = 1;
+            displayLocation();
+        break;
+    }
+}

@@ -26,53 +26,45 @@ function drawGrid(){
 }
 
 function breakWall(wall){
-    console.log(wall);
-    console.log(wall.resolved);//WTHHHHHHHHHHHHHHHHHH
-    switch(wall){
-        case 'N':
-            context.clearRect(xPix-19,yPix-21,39,2);
-            return 'N';
-        case 'S':
-            context.clearRect(xPix-19,yPix+19,39,2);
-            return 'S';
-        case 'E':
+    wall.then(toBreak => {
+        switch(toBreak){
+            case 'N':
+                context.clearRect(xPix-19,yPix-21,39,2);
+                clearLocation();
+                updateCurrLoc(xPos,yPos-1);
+                stack.push({x: xPos, y: yPos});
+                Nodes[xPos,yPos] = 1;
+                displayLocation();
+            break;
+            case 'S':
+                context.clearRect(xPix-19,yPix+19,39,2);
+                clearLocation();
+                updateCurrLoc(xPos, yPos+1);
+                stack.push({x: xPos, y: yPos});
+                Nodes[xPos,yPos] = 1;
+                displayLocation();
+            break;
+            case 'W':
+                context.clearRect(xPix-21,yPix-19,2,39);
+                clearLocation();
+                updateCurrLoc(xPos-1,yPos);
+                stack.push({x: xPos, y: yPos});
+                Nodes[xPos,yPos] = 1;
+                displayLocation();
+            break;
+            case 'E':
             context.clearRect(xPix+19,yPix-19,2,39);
-            return 'E';
-        case 'W':
-            context.clearRect(xPix-21,yPix-19,2,39);
-            return 'W';
-    }
-    
-}
-
-function moveTo(direction){
-    switch(direction){
-        case 'N':
-            updateCurrLoc(xPos,yPos-1);
-            stack.push({x: xPos, y: yPos});
-            Nodes[xPos,yPos] = 1;
-            displayLocation();
-        break;
-        case 'S':
-            updateCurrLoc(xPos, yPos+1);
-            stack.push({x: xPos, y: yPos});
-            Nodes[xPos,yPos] = 1;
-            displayLocation();
-        break;
-        case 'W':
-            updateCurrLoc(xPos-1,yPos);
-            stack.push({x: xPos, y: yPos});
-            Nodes[xPos,yPos] = 1;
-            displayLocation();
-        break;
-        case 'E':
+            clearLocation();
             updateCurrLoc(xPos+1, yPos);
             stack.push({x: xPos, y: yPos});
             Nodes[xPos,yPos] = 1;
             displayLocation();
-        break;
-    }
+            break;
+        }
+    });
 }
+
+
 
 function updateCurrLoc(x, y){
     xPos = x;
@@ -123,10 +115,10 @@ async function findNextNode(){
         avail.forEach((x,i) =>{
             if(x){
                 count++;
-                if(i == 0) possible.push(0); //north
-                else if(i == 1) possible.push(1); //south
-                else if(i == 2) possible.push(2); //west
-                else if(i == 3) possible.push(3); //east
+                if(i == 0) possible.push('N'); //north
+                else if(i == 1) possible.push('S'); //south
+                else if(i == 2) possible.push('W'); //west
+                else if(i == 3) possible.push('E'); //east
             }
         });
         if(possible.length != 0){
@@ -211,7 +203,7 @@ loopMain();
 
 async function loopMain(){
     while(!isVisitedTwice()){
-        moveTo(breakWall(findNextNode()));
+        breakWall(findNextNode());
         await sleep(500);
     }
 }
