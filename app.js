@@ -1,6 +1,9 @@
 
+
+
 var canvas = document.querySelector('canvas');
 var context = canvas.getContext("2d");
+
 
 //FUNCTIONS
 
@@ -33,7 +36,7 @@ function breakWall(wall){
                 clearLocation();
                 updateCurrLoc(xPos,yPos-1);
                 stack.push({x: xPos, y: yPos});
-                Nodes[xPos,yPos] = 1;
+                Nodes[xPos][yPos] = 1;
                 displayLocation();
             break;
             case 'S':
@@ -41,7 +44,7 @@ function breakWall(wall){
                 clearLocation();
                 updateCurrLoc(xPos, yPos+1);
                 stack.push({x: xPos, y: yPos});
-                Nodes[xPos,yPos] = 1;
+                Nodes[xPos][yPos] = 1;
                 displayLocation();
             break;
             case 'W':
@@ -49,7 +52,7 @@ function breakWall(wall){
                 clearLocation();
                 updateCurrLoc(xPos-1,yPos);
                 stack.push({x: xPos, y: yPos});
-                Nodes[xPos,yPos] = 1;
+                Nodes[xPos][yPos] = 1;
                 displayLocation();
             break;
             case 'E':
@@ -57,7 +60,7 @@ function breakWall(wall){
             clearLocation();
             updateCurrLoc(xPos+1, yPos);
             stack.push({x: xPos, y: yPos});
-            Nodes[xPos,yPos] = 1;
+            Nodes[xPos][yPos] = 1;
             displayLocation();
             break;
         }
@@ -86,19 +89,12 @@ function clearLocation(){
 
 //  NODE DFS ALGORITHM FUNCTIONS
 
-function initNodes(){
-    var nodes = Array.from(Array(15),() => new Array(15));
-    for(let i = 0; i < nodes.length; i++){
-        for(let j = 0; j < nodes[i].length; j++)
-            nodes[i][j] = 0;
-    }
-    return nodes;
-}
 
 function isVisitedTwice(){
-    for(let i = 0; i < Nodes.length; i++){
-        for(let j = 0; j < Nodes[i].length; j++)
-            if(Nodes[i,j] != 2) return false;
+    console.log(Nodes);
+    for(let i = 0; i < 15; i++){
+        for(let j = 0; j < 15; j++)
+            if(Nodes[i][j] != 2) return false;
     }
     return true;
 }
@@ -191,15 +187,17 @@ var yPos = 0;
 
 var stack = [{x: 0, y: 14}];
 var Nodes = Array.from(Array(15),() => new Array(15));
-for(let i = 0; i < Nodes.length; i++){
-    for(let j = 0; j < Nodes[i].length; j++)
+for(let i = 0; i < 15; i++){
+    for(let j = 0; j < 15; j++)
         Nodes[i][j] = 0;
 }
+console.log(Nodes);
 
 drawGrid();
 updateCurrLoc(0, 14);
 displayLocation();
 loopMain();
+
 
 async function loopMain(){
     while(!isVisitedTwice()){
