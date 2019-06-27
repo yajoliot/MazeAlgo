@@ -122,7 +122,7 @@ async function findNextNode(){
             return possible[getRandomInt(count)];
         } else {
             stack.pop();
-            Nodes[xPos, yPos] = 2;
+            Nodes[xPos][yPos] = 2;
             clearLocation();
             updateCurrLoc(stack[stack.length-1].x, stack[stack.length-1].y);
             displayLocation();
