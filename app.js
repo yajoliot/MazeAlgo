@@ -126,7 +126,7 @@ async function findNextNode(){
             clearLocation();
             updateCurrLoc(stack[stack.length-1].x, stack[stack.length-1].y);
             displayLocation();
-            await sleep(500);
+            await sleep(100);
         }
     }
 }
@@ -202,6 +202,6 @@ loopMain();
 async function loopMain(){
     while(!isVisitedTwice()){
         breakWall(findNextNode());
-        await sleep(500);
+        await sleep(100);
     }
 }
