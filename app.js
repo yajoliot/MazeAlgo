@@ -120,7 +120,6 @@ async function findNextNode(){
             try{
                 updateCurrLoc(stack[stack.length-1].x, stack[stack.length-1].y);
             } catch(err){
-                console.log(err);
                 isDone = true;
             }
             displayLocation();
@@ -157,12 +156,48 @@ function scanAdjacentNodes(){
 }
 
 function generateSeed(x, y, direc){
+    //CONVERT X AND Y TO HEXADEC VALUE
     var value = `${x.toString()}${y.toString()}${direc}`;
     seed += value;
 }
 
-function generateSeededMaze(seed){
+function generateSeededMaze(sd){
 
+    for(let i = 1; i < sd.length; i++){
+        let x = 0;
+        let y = 0;
+        let type = i % 3;
+        switch(type){
+            case 0:
+                switch(sd[i]){
+                    case 'N':
+                        updateCurrLoc(x,y);
+                        context.clearRect(xPix-19,yPix-21,39,2);  
+                    break;
+                    case 'S':
+                        updateCurrLoc(x,y);
+                        context.clearRect(xPix-19,yPix+19,39,2);
+                    break;
+                    case 'W':
+                        updateCurrLoc(x,y);
+                        context.clearRect(xPix-21,yPix-19,2,39);
+                    break;
+                    case 'E':
+                        updateCurrLoc(x,y);
+                        context.clearRect(xPix+19,yPix-19,2,39);
+                    break;
+                }
+            break;
+            case 1:
+                x = seed[i];
+            break;
+            case 2:
+                y = seed[i];
+            break;
+        }
+    }
+        
+    
 }
 
 
@@ -191,7 +226,7 @@ var yPix = 0;
 //position
 var xPos = 0;
 var yPos = 0;
-var seed = '';
+var seed = 'S';
 
 var stack = [{x: 0, y: 14}];
 var Nodes = Array.from(Array(15),() => new Array(15));
@@ -210,12 +245,11 @@ loopMain();
 
 async function loopMain(){
     while(!isDone){
-        console.log(isDone);
         breakWall(findNextNode());
         await sleep(100);
     }
 
-    console.log('DONE');
+    console.log(seed);
     //var displaySeed = `<p>${seed.toString()}<p>`;
     //querySelector(body).innerHTML = displaySeed;
 }
