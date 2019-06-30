@@ -1,6 +1,4 @@
 
-
-
 var canvas = document.querySelector('canvas');
 var context = canvas.getContext("2d");
 
@@ -34,6 +32,7 @@ function breakWall(wall){
             case 'N':
                 context.clearRect(xPix-19,yPix-21,39,2);
                 clearLocation();
+                generateSeed(xPos, yPos, 'N');
                 updateCurrLoc(xPos,yPos-1);
                 stack.push({x: xPos, y: yPos});
                 Nodes[xPos][yPos] = 1;
@@ -42,6 +41,7 @@ function breakWall(wall){
             case 'S':
                 context.clearRect(xPix-19,yPix+19,39,2);
                 clearLocation();
+                generateSeed(xPos, yPos, 'S');
                 updateCurrLoc(xPos, yPos+1);
                 stack.push({x: xPos, y: yPos});
                 Nodes[xPos][yPos] = 1;
@@ -50,6 +50,7 @@ function breakWall(wall){
             case 'W':
                 context.clearRect(xPix-21,yPix-19,2,39);
                 clearLocation();
+                generateSeed(xPos, yPos, 'W');
                 updateCurrLoc(xPos-1,yPos);
                 stack.push({x: xPos, y: yPos});
                 Nodes[xPos][yPos] = 1;
@@ -58,6 +59,7 @@ function breakWall(wall){
             case 'E':
             context.clearRect(xPix+19,yPix-19,2,39);
             clearLocation();
+            generateSeed(xPos, yPos, 'E');
             updateCurrLoc(xPos+1, yPos);
             stack.push({x: xPos, y: yPos});
             Nodes[xPos][yPos] = 1;
@@ -90,21 +92,12 @@ function clearLocation(){
 //  NODE DFS ALGORITHM FUNCTIONS
 
 
-function isVisitedTwice(){
-    console.log(Nodes);
-    for(let i = 0; i < 15; i++){
-        for(let j = 0; j < 15; j++)
-            if(Nodes[i][j] != 2) return false;
-    }
-    return true;
-}
-
 async function findNextNode(){
     var avail = [];
     var count = 0;
     var possible = [];
     var inBackTrack = false;
-    while(true){
+    while(!isDone){
         avail = scanAdjacentNodes();
         count = 0;
         possible = [];
@@ -124,7 +117,12 @@ async function findNextNode(){
             stack.pop();
             Nodes[xPos][yPos] = 2;
             clearLocation();
-            updateCurrLoc(stack[stack.length-1].x, stack[stack.length-1].y);
+            try{
+                updateCurrLoc(stack[stack.length-1].x, stack[stack.length-1].y);
+            } catch(err){
+                console.log(err);
+                isDone = true;
+            }
             displayLocation();
             await sleep(100);
         }
@@ -158,6 +156,15 @@ function scanAdjacentNodes(){
     return avail;
 }
 
+function generateSeed(x, y, direc){
+    var value = `${x.toString()}${y.toString()}${direc}`;
+    seed += value;
+}
+
+function generateSeededMaze(seed){
+
+}
+
 
 //UTILITY FUNCTIONS
 function getRandomInt(max){
@@ -184,6 +191,7 @@ var yPix = 0;
 //position
 var xPos = 0;
 var yPos = 0;
+var seed = '';
 
 var stack = [{x: 0, y: 14}];
 var Nodes = Array.from(Array(15),() => new Array(15));
@@ -191,6 +199,7 @@ for(let i = 0; i < 15; i++){
     for(let j = 0; j < 15; j++)
         Nodes[i][j] = 0;
 }
+var isDone = false;
 console.log(Nodes);
 
 drawGrid();
@@ -200,8 +209,13 @@ loopMain();
 
 
 async function loopMain(){
-    while(!isVisitedTwice()){
+    while(!isDone){
+        console.log(isDone);
         breakWall(findNextNode());
         await sleep(100);
     }
+
+    console.log('DONE');
+    //var displaySeed = `<p>${seed.toString()}<p>`;
+    //querySelector(body).innerHTML = displaySeed;
 }
