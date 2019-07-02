@@ -156,8 +156,7 @@ function scanAdjacentNodes(){
 }
 
 function generateSeed(x, y, direc){
-    //CONVERT X AND Y TO HEXADEC VALUE
-    var value = `${x.toString()}${y.toString()}${direc}`;
+    var value = `${x.toString(16)}${y.toString(16)}${direc}`;
     seed += value;
 }
 
@@ -235,15 +234,13 @@ for(let i = 0; i < 15; i++){
         Nodes[i][j] = 0;
 }
 var isDone = false;
-console.log(Nodes);
 
 drawGrid();
 updateCurrLoc(0, 14);
 displayLocation();
-loopMain();
 
 
-async function loopMain(){
+async function generateMaze(){
     while(!isDone){
         breakWall(findNextNode());
         await sleep(100);
@@ -251,5 +248,44 @@ async function loopMain(){
 
     console.log(seed);
     //var displaySeed = `<p>${seed.toString()}<p>`;
-    //querySelector(body).innerHTML = displaySeed;
+    //document.body.innerHTML = displaySeed;
+}
+
+function generateSeededMaze(sd){
+
+    for(let i = 1; i < sd.length; i++){
+        let x = 0;
+        let y = 0;
+        let type = i % 3;
+        switch(type){
+            case 0:
+                switch(sd[i]){
+                    case 'N':
+                        updateCurrLoc(x,y);
+                        context.clearRect(xPix-19,yPix-21,39,2);  
+                    break;
+                    case 'S':
+                        updateCurrLoc(x,y);
+                        context.clearRect(xPix-19,yPix+19,39,2);
+                    break;
+                    case 'W':
+                        updateCurrLoc(x,y);
+                        context.clearRect(xPix-21,yPix-19,2,39);
+                    break;
+                    case 'E':
+                        updateCurrLoc(x,y);
+                        context.clearRect(xPix+19,yPix-19,2,39);
+                    break;
+                }
+            break;
+            case 1:
+                x = seed[i];
+            break;
+            case 2:
+                y = seed[i];
+            break;
+        }
+    }
+        
+    
 }
