@@ -247,12 +247,12 @@ async function generateMaze(){
     }
 
     console.log(seed);
-    //var displaySeed = `<p>${seed.toString()}<p>`;
-    //document.body.innerHTML = displaySeed;
+    var displaySeed = `${seed.toString()}`;
+    document.getElementById('seedDis').innerHTML = displaySeed;
 }
 
 function generateSeededMaze(sd){
-
+    console.log(sd);
     for(let i = 1; i < sd.length; i++){
         let x = 0;
         let y = 0;
