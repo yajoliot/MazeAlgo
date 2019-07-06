@@ -161,7 +161,7 @@ function generateSeed(x, y, direc){
 }
 
 function generateSeededMaze(sd){
-
+    console.log('LOL');
     for(let i = 1; i < sd.length; i++){
         let x = 0;
         let y = 0;
@@ -246,13 +246,14 @@ async function generateMaze(){
         await sleep(100);
     }
 
-    console.log(seed);
     var displaySeed = `${seed.toString()}`;
     document.getElementById('seedDis').innerHTML = displaySeed;
 }
 
-function generateSeededMaze(sd){
+function generateSeededMaze(){
+    var sd = document.getElementsByName('seedToGen')[0].value;
     console.log(sd);
+    
     for(let i = 1; i < sd.length; i++){
         let x = 0;
         let y = 0;
@@ -279,13 +280,11 @@ function generateSeededMaze(sd){
                 }
             break;
             case 1:
-                x = seed[i];
+                x = parseInt(sd[i], 16);
             break;
             case 2:
-                y = seed[i];
+                y = parseInt(sd[i], 16);
             break;
         }
     }
-        
-    
 }
