@@ -89,6 +89,24 @@ function clearLocation(){
     context.clearRect(xPix-10,yPix-10,20,20);
 }
 
+// PLAYER MODE DISPLAY FUNCTIONS
+
+function updatePlayerLoc(x, y){
+    xPosPlayer = x;
+    yPosPlayer = y
+    xPixPlayer = x*40+20;
+    yPixPlayer = y*40+20;
+}
+
+function clearPlayerLocation(){
+    context.clearRect(xPixPlayer-10,yPixPlayer-10,20,20);
+}
+
+function displayPlayerLocation(){
+    context.fillStyle = "blue";
+    context.fillRect(xPixPLayer-10,yPixPLayer-10,20,20);
+}
+
 //  NODE DFS ALGORITHM FUNCTIONS
 
 
@@ -219,13 +237,21 @@ function sleep(ms){
 var bw = 600;
 // Box height
 var bh = 600;
-//position in pixels
+//position in pixels and position of generator
 var xPix = 0;
 var yPix = 0;
-//position
 var xPos = 0;
 var yPos = 0;
+
+//player position
+var xPosPlayer = 0;
+var yPosPlayer = 0;
+var xPixPlayer = 0;
+var yPixPlayer = 0;
+
+//Seed
 var seed = 'S';
+var mazeGenarated = false;
 
 var stack = [{x: 0, y: 14}];
 var Nodes = Array.from(Array(15),() => new Array(15));
@@ -241,7 +267,6 @@ displayLocation();
 
 
 async function generateMaze(){
-    console.log('DEBUG');
     while(!isDone){
         breakWall(findNextNode());
         await sleep(100);
@@ -287,5 +312,12 @@ function generateSeededMaze(){
                 y = parseInt(sd[i], 16);
             break;
         }
+    }
+}
+
+function playerMode(){
+    updatePlayerLoc(0, 14);
+    while(xPosPlayer != 14 && yPosPlayer){
+        
     }
 }
