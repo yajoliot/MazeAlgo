@@ -241,6 +241,7 @@ displayLocation();
 
 
 async function generateMaze(){
+    console.log('DEBUG');
     while(!isDone){
         breakWall(findNextNode());
         await sleep(100);
@@ -252,11 +253,11 @@ async function generateMaze(){
 
 function generateSeededMaze(){
     var sd = document.getElementsByName('seedToGen')[0].value;
-    console.log(sd);
+    let x = 0;
+    let y = 0;
     
     for(let i = 1; i < sd.length; i++){
-        let x = 0;
-        let y = 0;
+        
         let type = i % 3;
         switch(type){
             case 0:
