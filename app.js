@@ -286,7 +286,7 @@ async function generateMaze(){
 }
 
 function generateSeededMaze(){
-    var sd = document.getElementsByName('seedToGen')[0].value;
+    var seed = document.getElementsByName('seedToGen')[0].value;
     let x = 0;
     let y = 0;
     
@@ -295,7 +295,7 @@ function generateSeededMaze(){
         let type = i % 3;
         switch(type){
             case 0:
-                switch(sd[i]){
+                switch(seed[i]){
                     case 'N':
                         updateCurrLoc(x,y);
                         context.clearRect(xPix-19,yPix-21,39,2);  
@@ -315,10 +315,10 @@ function generateSeededMaze(){
                 }
             break;
             case 1:
-                x = parseInt(sd[i], 16);
+                x = parseInt(seed[i], 16);
             break;
             case 2:
-                y = parseInt(sd[i], 16);
+                y = parseInt(seed[i], 16);
             break;
         }
     }
@@ -329,19 +329,25 @@ function playerMode(){
     
     updatePlayerLoc(0, 14)
     displayPlayerLocation();
-    
+    let validPos= false;
     // Event Listeners
     document.addEventListener('keydown', (event)=>{
         clearPlayerLocation();
-        verifyRequestedPlayerLoc()
-        if(event.keyCode == 38)
-            updatePlayerLoc(xPosPlayer, yPosPlayer-1);
-        else if (event.keyCode == 40)
-            updatePlayerLoc(xPosPlayer, yPosPlayer+1);
-        else if (event.keyCode == 37)
-            updatePlayerLoc(xPosPlayer-1, yPosPlayer);
-        else if (event.keyCode == 39)
-            updatePlayerLoc(xPosPlayer+1, yPosPlayer);
+
+        if(event.keyCode == 38 && validPos){
+            if(verifyRequestedPlayerLoc('N'))
+                updatePlayerLoc(xPosPlayer, yPosPlayer-1);
+        } else if (event.keyCode == 40 && validPos){
+            if(verifyRequestedPlayerLoc('S'))
+                updatePlayerLoc(xPosPlayer, yPosPlayer+1);
+        } else if (event.keyCode == 37 && validPos){
+            if(verifyRequestedPlayerLoc('W'))
+                updatePlayerLoc(xPosPlayer-1, yPosPlayer);
+        } else if (event.keyCode == 39){
+            if(verifyRequestedPlayerLoc('E'))
+                updatePlayerLoc(xPosPlayer+1, yPosPlayer);
+        }
+
         displayPlayerLocation();
         console.log(xPosPlayer);
         console.log(yPosPlayer);
