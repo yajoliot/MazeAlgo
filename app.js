@@ -93,7 +93,7 @@ function clearLocation(){
 
 function updatePlayerLoc(x, y){
     xPosPlayer = x;
-    yPosPlayer = y
+    yPosPlayer = y;
     xPixPlayer = x*40+20;
     yPixPlayer = y*40+20;
 }
@@ -104,7 +104,13 @@ function clearPlayerLocation(){
 
 function displayPlayerLocation(){
     context.fillStyle = "blue";
-    context.fillRect(xPixPLayer-10,yPixPLayer-10,20,20);
+    context.fillRect(xPixPlayer-10,yPixPlayer-10,20,20);
+}
+
+//PLAYER MODE LOGIC
+
+function verifyRequestedPlayerLoc(){
+    console.log('requested pos');
 }
 
 //  NODE DFS ALGORITHM FUNCTIONS
@@ -231,7 +237,7 @@ function sleep(ms){
 
 
 
-//MAIN
+//INITIATIONS VARIABLES
 //init
 // Box width
 var bw = 600;
@@ -251,7 +257,7 @@ var yPixPlayer = 0;
 
 //Seed
 var seed = 'S';
-var mazeGenarated = false;
+var isDone = false;
 
 var stack = [{x: 0, y: 14}];
 var Nodes = Array.from(Array(15),() => new Array(15));
@@ -259,11 +265,14 @@ for(let i = 0; i < 15; i++){
     for(let j = 0; j < 15; j++)
         Nodes[i][j] = 0;
 }
-var isDone = false;
 
+
+
+//MAIN
 drawGrid();
 updateCurrLoc(0, 14);
 displayLocation();
+
 
 
 async function generateMaze(){
@@ -313,11 +322,32 @@ function generateSeededMaze(){
             break;
         }
     }
+    isDone = true;
 }
 
 function playerMode(){
-    updatePlayerLoc(0, 14);
-    while(xPosPlayer != 14 && yPosPlayer){
-        
-    }
+    
+    updatePlayerLoc(0, 14)
+    displayPlayerLocation();
+    
+    // Event Listeners
+    document.addEventListener('keydown', (event)=>{
+        clearPlayerLocation();
+        verifyRequestedPlayerLoc()
+        if(event.keyCode == 38)
+            updatePlayerLoc(xPosPlayer, yPosPlayer-1);
+        else if (event.keyCode == 40)
+            updatePlayerLoc(xPosPlayer, yPosPlayer+1);
+        else if (event.keyCode == 37)
+            updatePlayerLoc(xPosPlayer-1, yPosPlayer);
+        else if (event.keyCode == 39)
+            updatePlayerLoc(xPosPlayer+1, yPosPlayer);
+        displayPlayerLocation();
+        console.log(xPosPlayer);
+        console.log(yPosPlayer);
+        if (xPosPlayer == 14 && yPosPlayer == 0)
+            alert('YOU WON');
+    });
+    
 }
+
