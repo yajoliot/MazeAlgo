@@ -109,8 +109,23 @@ function displayPlayerLocation(){
 
 //PLAYER MODE LOGIC
 
-function verifyRequestedPlayerLoc(){
-    console.log('requested pos');
+function verifyRequestedPlayerLoc(direc){
+    switch(direc){
+        case 'N':
+            
+            if(yPosPlayer-1 < 0) return false;
+        break;
+        case 'S':
+            if(yPosPlayer+1 > 14) return false;
+        break;
+        case 'W':
+            if(xPosPlayer-1 < 0) return false;
+        break;
+        case 'E':
+            if(xPosPlayer+1 > 14) return false;
+        break;
+    }
+    return true;
 }
 
 //  NODE DFS ALGORITHM FUNCTIONS
@@ -329,22 +344,21 @@ function playerMode(){
     
     updatePlayerLoc(0, 14)
     displayPlayerLocation();
-    let validPos= false;
     // Event Listeners
     document.addEventListener('keydown', (event)=>{
         clearPlayerLocation();
 
-        if(event.keyCode == 38 && validPos){
-            if(verifyRequestedPlayerLoc('N'))
+        if (event.keyCode == 38 || event.keyCode == 87){
+            if (verifyRequestedPlayerLoc('N'))
                 updatePlayerLoc(xPosPlayer, yPosPlayer-1);
-        } else if (event.keyCode == 40 && validPos){
-            if(verifyRequestedPlayerLoc('S'))
+        } else if (event.keyCode == 40 || event.keyCode == 83){
+            if (verifyRequestedPlayerLoc('S'))
                 updatePlayerLoc(xPosPlayer, yPosPlayer+1);
-        } else if (event.keyCode == 37 && validPos){
-            if(verifyRequestedPlayerLoc('W'))
+        } else if (event.keyCode == 37 || event.keyCode == 65){
+            if (verifyRequestedPlayerLoc('W'))
                 updatePlayerLoc(xPosPlayer-1, yPosPlayer);
-        } else if (event.keyCode == 39){
-            if(verifyRequestedPlayerLoc('E'))
+        } else if (event.keyCode == 39 || event.keyCode == 68){
+            if (verifyRequestedPlayerLoc('E'))
                 updatePlayerLoc(xPosPlayer+1, yPosPlayer);
         }
 
