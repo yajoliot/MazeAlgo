@@ -112,16 +112,19 @@ function displayPlayerLocation(){
 function verifyRequestedPlayerLoc(direc){
     switch(direc){
         case 'N':
-            
+            if(context.getImageData(xPixPlayer, yPixPlayer-20, 1, 1).data[3] == 255) return false;
             if(yPosPlayer-1 < 0) return false;
         break;
         case 'S':
+            if(context.getImageData(xPixPlayer, yPixPlayer+20, 1, 1).data[3] == 255) return false;
             if(yPosPlayer+1 > 14) return false;
         break;
         case 'W':
+            if(context.getImageData(xPixPlayer-20, yPixPlayer, 1, 1).data[3] == 255) return false;
             if(xPosPlayer-1 < 0) return false;
         break;
         case 'E':
+            if(context.getImageData(xPixPlayer+20, yPixPlayer, 1, 1).data[3] == 255) return false;
             if(xPosPlayer+1 > 14) return false;
         break;
     }
@@ -347,7 +350,6 @@ function playerMode(){
     // Event Listeners
     document.addEventListener('keydown', (event)=>{
         clearPlayerLocation();
-
         if (event.keyCode == 38 || event.keyCode == 87){
             if (verifyRequestedPlayerLoc('N'))
                 updatePlayerLoc(xPosPlayer, yPosPlayer-1);
