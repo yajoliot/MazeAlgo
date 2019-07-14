@@ -308,7 +308,7 @@ function generateSeededMaze(){
     let x = 0;
     let y = 0;
     
-    for(let i = 1; i < sd.length; i++){
+    for(let i = 1; i < seed.length; i++){
         
         let type = i % 3;
         switch(type){
