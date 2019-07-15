@@ -1,6 +1,11 @@
 const express = require('express');
+var app = express();
+const server = require('http').Server(app);
+const ioSocket = require('socket.io');
+var io = ioSocket(server);
+
 const path = require('path')
-const app = express();
+
 
 app.use(express.static(__dirname));
 
