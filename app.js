@@ -1,6 +1,7 @@
-
 var canvas = document.querySelector('canvas');
 var context = canvas.getContext("2d");
+
+var socket = io.connect('http://localhost:3000');
 
 
 //FUNCTIONS
