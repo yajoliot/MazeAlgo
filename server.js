@@ -1,14 +1,25 @@
 var express = require('express');
-var http = require('http');
 var app = express();
-var server = http.createServer(app);
-var io = require('socket.io').listen(server);
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
 
 const path = require('path')
 
-io.on('connection', () => {
+io.on('connection', (socket) => {
     console.log('user connected');
+    io.emit('message1', 'message1');
+
+    socket.on('message2',(message) => {
+        console.log(message);
+    });
+    
 });
+
+
+
+
+
 
 app.use(express.static(__dirname));
 

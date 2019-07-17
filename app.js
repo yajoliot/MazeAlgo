@@ -1,7 +1,15 @@
+
+
 var canvas = document.querySelector('canvas');
 var context = canvas.getContext("2d");
 
+//SOCKET LOGIC With display other player logic
+
 var socket = io.connect('http://localhost:3000');
+
+socket.on('message1', (message) => {
+    console.log(message);
+})
 
 
 //FUNCTIONS
@@ -203,44 +211,6 @@ function generateSeed(x, y, direc){
     seed += value;
 }
 
-function generateSeededMaze(sd){
-    console.log('LOL');
-    for(let i = 1; i < sd.length; i++){
-        let x = 0;
-        let y = 0;
-        let type = i % 3;
-        switch(type){
-            case 0:
-                switch(sd[i]){
-                    case 'N':
-                        updateCurrLoc(x,y);
-                        context.clearRect(xPix-19,yPix-21,39,2);  
-                    break;
-                    case 'S':
-                        updateCurrLoc(x,y);
-                        context.clearRect(xPix-19,yPix+19,39,2);
-                    break;
-                    case 'W':
-                        updateCurrLoc(x,y);
-                        context.clearRect(xPix-21,yPix-19,2,39);
-                    break;
-                    case 'E':
-                        updateCurrLoc(x,y);
-                        context.clearRect(xPix+19,yPix-19,2,39);
-                    break;
-                }
-            break;
-            case 1:
-                x = seed[i];
-            break;
-            case 2:
-                y = seed[i];
-            break;
-        }
-    }
-        
-    
-}
 
 
 //UTILITY FUNCTIONS
@@ -305,6 +275,7 @@ async function generateMaze(){
 }
 
 function generateSeededMaze(){
+    socket.emit('message2', 'message2');
     var seed = document.getElementsByName('seedToGen')[0].value;
     let x = 0;
     let y = 0;
