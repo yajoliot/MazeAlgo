@@ -3,13 +3,38 @@
 var canvas = document.querySelector('canvas');
 var context = canvas.getContext("2d");
 
-//SOCKET LOGIC With display other player logic
+//SOCKET LOGIC With display other player
 
 var socket = io.connect('http://localhost:3000');
 
-socket.on('message1', (message) => {
-    console.log(message);
+socket.on('connected', (mess) => {
+    console.log(mess);
 })
+
+socket.on('newPlayer2Pos', (pos) => {
+    console.log(`${pos.x} ${pos.y}`);
+    clearPlayer2Location();
+    updatePlayer2Loc(pos.x, pos.y);
+    displayPlayer2Location();
+
+});
+
+
+function displayPlayer2Location(){
+    context.fillStyle = "yellow";
+    context.fillRect(xPixPlayer2-10,yPixPlayer2-10,20,20);
+}
+
+function clearPlayer2Location(){
+    context.clearRect(xPixPlayer2-10,yPixPlayer2-10,20,20);
+}
+
+function updatePlayer2Loc(x, y){
+    xPosPlayer2 = x;
+    yPosPlayer2 = y;
+    xPixPlayer2 = x*40+20;
+    yPixPlayer2 = y*40+20;
+}
 
 
 //FUNCTIONS
@@ -244,6 +269,12 @@ var yPosPlayer = 0;
 var xPixPlayer = 0;
 var yPixPlayer = 0;
 
+//player2 position
+var xPosPlayer2 = 0;
+var yPosPlayer2 = 0;
+var xPixPlayer2 = 0;
+var yPixPlayer2 = 0;
+
 //Seed
 var seed = 'S';
 var isDone = false;
@@ -275,7 +306,6 @@ async function generateMaze(){
 }
 
 function generateSeededMaze(){
-    socket.emit('message2', 'message2');
     var seed = document.getElementsByName('seedToGen')[0].value;
     let x = 0;
     let y = 0;
@@ -323,17 +353,25 @@ function playerMode(){
     document.addEventListener('keydown', (event)=>{
         clearPlayerLocation();
         if (event.keyCode == 38 || event.keyCode == 87){
-            if (verifyRequestedPlayerLoc('N'))
+            if (verifyRequestedPlayerLoc('N')){
                 updatePlayerLoc(xPosPlayer, yPosPlayer-1);
+                socket.emit('newPos', {x: xPosPlayer, y: yPosPlayer});
+            } 
         } else if (event.keyCode == 40 || event.keyCode == 83){
-            if (verifyRequestedPlayerLoc('S'))
+            if (verifyRequestedPlayerLoc('S')){
                 updatePlayerLoc(xPosPlayer, yPosPlayer+1);
+                socket.emit('newPos', {x: xPosPlayer, y: yPosPlayer});
+            }
         } else if (event.keyCode == 37 || event.keyCode == 65){
-            if (verifyRequestedPlayerLoc('W'))
+            if (verifyRequestedPlayerLoc('W')){
                 updatePlayerLoc(xPosPlayer-1, yPosPlayer);
+                socket.emit('newPos', {x: xPosPlayer, y: yPosPlayer});
+            }
         } else if (event.keyCode == 39 || event.keyCode == 68){
-            if (verifyRequestedPlayerLoc('E'))
+            if (verifyRequestedPlayerLoc('E')){
                 updatePlayerLoc(xPosPlayer+1, yPosPlayer);
+                socket.emit('newPos', {x: xPosPlayer, y: yPosPlayer});
+            }
         }
 
         displayPlayerLocation();

@@ -3,16 +3,22 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
+const path = require('path');
 
-const path = require('path')
-
+var sockets = [];
 io.on('connection', (socket) => {
-    console.log('user connected');
-    io.emit('message1', 'message1');
+    sockets.push(socket);
+    io.emit('connected', 'You are now connected!');
 
-    socket.on('message2',(message) => {
-        console.log(message);
+    socket.on('newPos',(pos) => {
+        console.log(`${socket.id}: x:${pos.x} y: ${pos.y}`);
+        sockets.forEach((sock)=>{
+            if(socket.id != sock.id)
+                io.to(sock.id).emit('newPlayer2Pos', pos);
+        });
     });
+
+
     
 });
 
