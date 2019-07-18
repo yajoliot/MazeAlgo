@@ -7,18 +7,22 @@ var context = canvas.getContext("2d");
 
 var socket = io.connect('http://localhost:3000');
 
-socket.on('connected', (mess) => {
-    console.log(mess);
-})
+function connectToServer(){
 
-socket.on('newPlayer2Pos', (pos) => {
-    console.log(`${pos.x} ${pos.y}`);
-    clearPlayer2Location();
-    updatePlayer2Loc(pos.x, pos.y);
-    displayPlayer2Location();
+    
 
-});
-
+    socket.on('connected', (mess) => {
+        console.log(mess);
+    })
+    
+    socket.on('newPlayer2Pos', (pos) => {
+        console.log(`${pos.x} ${pos.y}`);
+        clearPlayer2Location();
+        updatePlayer2Loc(pos.x, pos.y);
+        displayPlayer2Location();
+    
+    });
+}
 
 function displayPlayer2Location(){
     context.fillStyle = "yellow";
