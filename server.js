@@ -21,8 +21,17 @@ io.on('connection', (socket) => {
     });
 });
 
+var xPos = 0;
+var yPos = 14;
 
+var isDone = false;
+var seed = 'S';
+var stack = [{x: 0, y: 14}];
+var Nodes = Array.from(Array(15),() => new Array(15));
 
+setNodes();
+generateMaze();
+console.log(seed);
 
 
 
@@ -32,19 +41,16 @@ app.get('/', (req,res)=>{
     res.sendFile('index.html', __dirname);
 });
 
+
+
 server.listen(3000, ()=>{
     console.log('Listening at port 3000');
 });
 
 
 
-var seed = '';
-var stack = [{x: 0, y: 14}];
-var Nodes = Array.from(Array(15),() => new Array(15));
-for(let i = 0; i < 15; i++)
-    for(let j = 0; j < 15; j++)
-        Nodes[i][j] = 0;
 function setNodes(){
+    
     for(let i = 0; i < 15; i++)
         for(let j = 0; j < 15; j++)
             Nodes[i][j] = 0;
@@ -55,9 +61,6 @@ function generateMaze(){
     while(!isDone){
         breakWall(findNextNode());
     }
-
-    var displaySeed = `${seed.toString()}`;
-    document.getElementById('seedDis').innerHTML = displaySeed;
 }
 
 function findNextNode(){
@@ -122,7 +125,7 @@ function scanAdjacentNodes(){
 
 function generateSeed(x, y, direc){
     var value = `${x.toString(16)}${y.toString(16)}${direc}`;
-    serverSeed += value;
+    seed += value;
 }
 
 function getRandomInt(max){
@@ -130,8 +133,7 @@ function getRandomInt(max){
 }
 
 function breakWall(wall){
-    wall.then(toBreak => {
-        switch(toBreak){
+        switch(wall){
             case 'N':
                 generateSeed(xPos, yPos, 'N');
                 updateCurrLoc(xPos,yPos-1);
@@ -157,5 +159,9 @@ function breakWall(wall){
             Nodes[xPos][yPos] = 1;
             break;
         }
-    });
+}
+
+function updateCurrLoc(x, y){
+    xPos = x;
+    yPos = y;
 }
