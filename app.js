@@ -7,9 +7,12 @@ var context = canvas.getContext("2d");
 
 var socket = io.connect('http://localhost:3000');
 
+
+
+
 function connectToServer(){
 
-    
+    socket.emit('playOnlineClicked', 'wants to play');
 
     socket.on('connected', (mess) => {
         console.log(mess);
@@ -22,6 +25,16 @@ function connectToServer(){
         displayPlayer2Location();
     
     });
+
+    socket.on('serverSeed', (serverSeed) => {
+        
+        seed = serverSeed;
+        console.log(seed);
+        generateSeededMaze();
+    });
+
+    
+
 }
 
 function displayPlayer2Location(){
@@ -310,7 +323,8 @@ async function generateMaze(){
 }
 
 function generateSeededMaze(){
-    var seed = document.getElementsByName('seedToGen')[0].value;
+    if(seed == 'S')
+        seed = document.getElementsByName('seedToGen')[0].value;
     let x = 0;
     let y = 0;
     

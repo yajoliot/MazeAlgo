@@ -5,12 +5,14 @@ var io = require('socket.io')(server);
 
 const path = require('path');
 
+
+//SOCKET LOGIC
 var sockets = [];
 
 io.on('connection', (socket) => {
     sockets.push(socket);
+    console.log('connected', `${socket.id} is now connected`);
     io.emit('connected', `${socket.id} is now connected`);
-    //io.emit('serverSeed', )
 
     socket.on('newPos',(pos) => {
         console.log(`${socket.id}: x:${pos.x} y: ${pos.y}`);
@@ -19,11 +21,34 @@ io.on('connection', (socket) => {
                 io.to(sock.id).emit('newPlayer2Pos', pos);
         });
     });
+
+    socket.on('playOnlineClicked', (message)=>{
+        console.log(`${socket.id} ${message}`);
+        io.emit('serverSeed', seed);
+    });
 });
 
+
+
+
+
+
+//set public directory to serve html
+app.use(express.static(__dirname));
+
+app.get('/', (req,res)=>{
+    res.sendFile('index.html', __dirname);
+});
+
+
+//server port listen
+server.listen(3000, ()=>{
+    console.log('Listening at port 3000');
+});
+
+//VARIABLES FOR SEED GENERATION
 var xPos = 0;
 var yPos = 14;
-
 var isDone = false;
 var seed = 'S';
 var stack = [{x: 0, y: 14}];
@@ -34,21 +59,7 @@ generateMaze();
 console.log(seed);
 
 
-
-app.use(express.static(__dirname));
-
-app.get('/', (req,res)=>{
-    res.sendFile('index.html', __dirname);
-});
-
-
-
-server.listen(3000, ()=>{
-    console.log('Listening at port 3000');
-});
-
-
-
+//sets all Nodes to 0
 function setNodes(){
     
     for(let i = 0; i < 15; i++)
@@ -56,7 +67,7 @@ function setNodes(){
             Nodes[i][j] = 0;
 }
 
-
+//GENERATE SEEED / MAZE LOGIC
 function generateMaze(){
     while(!isDone){
         breakWall(findNextNode());
