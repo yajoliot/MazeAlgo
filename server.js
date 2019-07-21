@@ -26,6 +26,17 @@ io.on('connection', (socket) => {
         console.log(`${socket.id} ${message}`);
         io.emit('serverSeed', seed);
     });
+
+    socket.on('playerWin', (mess) => {
+        console.log(`${socket.id} ${mess}`);
+        stack = [{x: 0, y: 14}];
+        isDone = false;
+        seed = 'S';
+        setNodes();
+        generateMaze();
+        console.log(seed);
+        io.emit('resetGame', seed);
+    });
 });
 
 

@@ -33,7 +33,12 @@ function connectToServer(){
         generateSeededMaze();
     });
 
-    
+    socket.on('resetGame', (serverSeed) => {
+        drawGrid();
+        seed = serverSeed;
+        generateSeededMaze();
+        updatePlayerLoc(0, 14);
+    });
 
 }
 
@@ -395,8 +400,11 @@ function playerMode(){
         displayPlayerLocation();
         console.log(xPosPlayer);
         console.log(yPosPlayer);
-        if (xPosPlayer == 14 && yPosPlayer == 0)
+        if (xPosPlayer == 14 && yPosPlayer == 0){
             alert('YOU WON');
+            socket.emit('playerWin', 'playerWin');
+        }
+            
     });
     
 }
