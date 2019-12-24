@@ -3,38 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <title>DFS maze</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body style=" background: lightblue;">
-    <div>
-        <button onclick="generateMaze()">Generate Maze</button>
-    </div>
-    <div></div>
-    
-    <div>
-        <label for="uname">Enter A Seed: </label>
-        <input type="text" name="seedToGen"/>
-    </div>
-    <div>
-        <button onclick="generateSeededMaze()">Generate Seeded Maze</button>
-    </div>
 
-    <div>
-        <button onclick="playerMode()">Ready To Play</button>
-    </div>
-    <div>
-        <button onclick="connectToServer()">Play Online</button>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">MazeGenerator</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item active">
+              <a class="nav-link" href="./index.html"><b>SinglePlayer</b></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./multiplayer.html">MultiPlayer</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend" >
+                    <span class="input-group-text">Seed: </span>
+                </div>
+                <input type="text" id="seedToGen" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onclick="generateSeededMaze()">Generate Seeded Maze</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <button class="btn-primary" onclick="generateMaze()">Generate Maze</button>
+            </div>
+            <div class="col-3">
+                <button class="btn-primary" onclick="generateSeededMaze()">Generate Seeded Maze</button>
+            </div>
+        
+            <div class="col-3">
+                <button class="btn-primary" onclick="playerMode()">Ready To Play</button>
+            </div>
+            <div class="col-3">
+                <button class="btn-primary" onclick="connectToServer()">Play Online</button>
+            </div>
+        </div>
+        
+        
+        <div class="row">
+            <div class="col-7">
+                <canvas id="canvas" width="601px" height="601px" style="background: #fff; margin:20px"></canvas>
+            </div>
+            <div class="col-5">
+                <textarea id="seedDis" style="width: 100%; height: 90%; margin-top: 2.5vh;"></textarea>
+            </div>
+        </div>
+        
     </div>
     
-
-    <canvas id="canvas" width="601px" height="601px" style="background: #fff; margin:20px"></canvas>
-    <textarea id="seedDis"></textarea>
 
     <script src="./socket.io/socket.io.js"></script>
-    <script src="./app.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="./script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 </body>
 </html>

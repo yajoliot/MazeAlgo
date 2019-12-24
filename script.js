@@ -168,7 +168,7 @@ function displayPlayerLocation(){
 function verifyRequestedPlayerLoc(direc){
     switch(direc){
         case 'N':
-            if(context.getImageData(xPixPlayer, yPixPlayer-20, 1, 1).data[3] == 255) return false;
+             
             if(yPosPlayer-1 < 0) return false;
         break;
         case 'S':
@@ -329,7 +329,7 @@ async function generateMaze(){
 
 function generateSeededMaze(){
     if(seed == 'S')
-        seed = document.getElementsByName('seedToGen')[0].value;
+        seed = document.getElementById('seedToGen').value;
     let x = 0;
     let y = 0;
     
